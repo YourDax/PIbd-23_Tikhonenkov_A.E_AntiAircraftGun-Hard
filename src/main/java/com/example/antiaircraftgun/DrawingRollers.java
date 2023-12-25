@@ -3,16 +3,16 @@ package com.example.antiaircraftgun;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class DrawingRollers {
+public class DrawingRollers implements IDrawingAdditionalElement{
     private Color _RollersColor;
     private NumberRollers _numRollers;
     public void SetNumberRollers(int numberRollers)
     {
         _numRollers = NumberRollers.FromInteger(numberRollers);
     }
-    public void Init(Color trackRollersColor)
+    public DrawingRollers(Color rollersColor)
     {
-        _RollersColor = trackRollersColor;
+        _RollersColor = rollersColor;
     }
 
     public void DrawRollers(GraphicsContext gc, float startPosX, float startPosY) {

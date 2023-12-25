@@ -1,6 +1,7 @@
 package com.example.antiaircraftgun;
 
 public enum Direction {
+    None,
     Up,
     Down,
     Left,
@@ -10,6 +11,8 @@ public enum Direction {
     {
         switch(intValue)
         {
+            case 0:
+                return None;
             case 1:
                 return Up;
             case 2:

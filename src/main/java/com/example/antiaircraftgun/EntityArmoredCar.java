@@ -5,9 +5,9 @@ import java.util.Random;
 
 public class EntityArmoredCar
 {
-    private int _speed;
-    private float _weight;
-    private Color _bodyColor;
+    private final int _speed;
+    private final float _weight;
+    private final Color _bodyColor;
     public int GetSpeed()
     {
         return _speed;
@@ -28,7 +28,7 @@ public class EntityArmoredCar
         return _speed * 100 / _weight;
     }
 
-    public void Init(int speed, float weight, Color bodyColor)
+    public EntityArmoredCar(int speed, float weight, Color bodyColor)
     {
         Random random = new Random();
         _speed = speed <= 0 ? random.nextInt(100) + 50 : speed;

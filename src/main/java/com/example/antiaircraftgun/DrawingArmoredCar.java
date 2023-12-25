@@ -6,9 +6,9 @@ import javafx.scene.paint.Color;
 public class DrawingArmoredCar
 {
     private EntityArmoredCar _armoredCar;
-    private DrawingRollers _drawingRollers;
-    private float _startPosX;
-    private float _startPosY;
+    private IDrawingAdditionalElement _drawingRollers;
+    protected float _startPosX;
+    protected float _startPosY;
     private Integer _pictureWidth;
     private Integer _pictureHeight;
     private int _armoredCarWidth = 90;
@@ -18,20 +18,29 @@ public class DrawingArmoredCar
     {
         return _armoredCar;
     }
-    public DrawingRollers GetDrawningRollers()
+    protected void SetArmoredVehicle(EntityArmoredCar armoredCar)
+    {
+        _armoredCar = armoredCar;
+    }
+    public IDrawingAdditionalElement GetDrawingRollers()
     {
         return _drawingRollers;
     }
-
-    public void Init(int speed, float weight, Color bodyColor)
+    public void SetDrawingRollers(IDrawingAdditionalElement drawingRollers)
     {
-        _armoredCar = new EntityArmoredCar();
-        _armoredCar.Init(speed, weight, bodyColor);
-
-        _drawingRollers = new DrawingRollers();
-        _drawingRollers.Init(bodyColor);
+        _drawingRollers = drawingRollers;
     }
-
+    public DrawingArmoredCar(int speed, float weight, Color bodyColor)
+    {
+        _armoredCar = new EntityArmoredCar(speed, weight, bodyColor);
+        _drawingRollers = new DrawingRollers(bodyColor);
+    }
+    protected DrawingArmoredCar(int speed, float weight, Color bodyColor, int armoredCarWidth, int armoredCarHeight)
+    {
+        this(speed, weight, bodyColor);
+        _armoredCarHeight = armoredCarHeight;
+        _armoredCarWidth = armoredCarWidth;
+    }
     public void SetPosition(int x, int y, int width, int height)
     {
         if (x < 0 || y < 0) {
@@ -129,5 +138,14 @@ public class DrawingArmoredCar
         if (_startPosY + _armoredCarHeight > _pictureHeight) {
             _startPosY = _pictureHeight - _armoredCarHeight;
         }
+    }
+    public float[] GetCurrentPosition()
+    {
+        float[] position = new float[4];
+        position[0] = _startPosX;
+        position[1] = _startPosY;
+        position[2] = _startPosX + _armoredCarWidth;
+        position[3] = _startPosY + _armoredCarHeight;
+        return position;
     }
 }
