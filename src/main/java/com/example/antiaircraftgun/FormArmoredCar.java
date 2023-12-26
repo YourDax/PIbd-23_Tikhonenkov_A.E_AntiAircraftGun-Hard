@@ -20,35 +20,51 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Random;
 
-public class FormArmoredCar extends Application
-{
+// Класс, представляющий графическое приложение для управления бронетранспортом
+public class FormArmoredCar extends Application {
+    // Панель приложения
     private Pane _root;
+    // Сцена приложения
     private Scene _scene;
+    // Холст для рисования
     private Canvas _canvas;
+    // Горизонтальный контейнер
     private HBox _hBox;
+    // Кнопка "Create"
     private Button _buttonCreate;
+    // Кнопки управления движением
     private Button _buttonUp;
     private Button _buttonDown;
     private Button _buttonLeft;
     private Button _buttonRight;
+    // Метки для отображения параметров бронетранспорта
     private Label _labelSpeedValue;
     private Label _labelWeightValue;
     private Label _labelBodyColorValue;
+    // Выпадающий список для выбора количества роликов
     private ComboBox<String> _comboBoxNumRollers;
+    // Высота контейнера
     private double _hBoxHeight;
+    // Высота кнопки "Create"
     private double _buttonCreateHeight;
+    // Ширина и высота кнопок управления
     private final int _buttonMoveWidth = 30;
     private final int _buttonMoveHeight = 30;
+    // Расстояние между кнопками управления
     private final int _distanceBetweenMoveButtons = 5;
+    // Отступ кнопок от края окна
     private final double _buttonMargin = 10.0;
+    // Объект для отрисовки бронетранспорта
     private DrawingArmoredCar _armoredCar;
 
+    // Метод для запуска приложения
     @Override
-    public void start(Stage stage) throws IOException
-    {
+    public void start(Stage stage) throws IOException {
+        // Загрузка FXML-файла
         FXMLLoader fxmlLoader = new FXMLLoader(FormArmoredCar.class.getResource("hello-view.fxml"));
         _scene = new Scene(fxmlLoader.load(), 600, 400);
 
+        // Инициализация элементов интерфейса
         _root = (Pane) _scene.lookup("#root");
         _root.setStyle("-fx-background-color: #31374c;");
 
@@ -62,10 +78,10 @@ public class FormArmoredCar extends Application
         stage.setTitle("AntiAircraftGun");
         stage.setScene(_scene);
 
+        // Обработчики изменения размеров окна
         _scene.widthProperty().addListener((obs, oldVal, newVal) -> {
             UpdateGUI();
-            if (_armoredCar != null)
-            {
+            if (_armoredCar != null) {
                 _armoredCar.ChangeBorders((int) _canvas.getWidth(), (int) _canvas.getHeight());
             }
             Draw();
@@ -73,8 +89,7 @@ public class FormArmoredCar extends Application
 
         _scene.heightProperty().addListener((obs, oldVal, newVal) -> {
             UpdateGUI();
-            if (_armoredCar != null)
-            {
+            if (_armoredCar != null) {
                 _armoredCar.ChangeBorders((int) _canvas.getWidth(), (int) _canvas.getHeight());
             }
             Draw();
@@ -83,6 +98,7 @@ public class FormArmoredCar extends Application
         _root.applyCss();
         _root.layout();
 
+        // Инициализация при старте
         stage.setOnShowing(event -> {
             _hBoxHeight = _hBox.getHeight();
             _buttonCreateHeight = _buttonCreate.getHeight();
@@ -93,12 +109,14 @@ public class FormArmoredCar extends Application
         stage.show();
     }
 
-    private void InitHBox()
-    {
+    // Инициализация контейнера с параметрами бронетранспорта
+    private void InitHBox() {
+        // Создание горизонтального контейнера
         _hBox = new HBox();
         _hBox.setStyle("-fx-background-color: #31374c;");
         _root.getChildren().add(_hBox);
 
+        // Метки для параметров
         Label labelSpeed = new Label("Speed:");
         labelSpeed.setStyle("-fx-text-fill: #b8becc; -fx-padding: 5 5 5 5;");
         _hBox.getChildren().add(labelSpeed);
@@ -127,6 +145,7 @@ public class FormArmoredCar extends Application
         labelNumRollers.setStyle("-fx-text-fill: #b8becc; -fx-padding: 5 5 5 5;");
         _hBox.getChildren().add(labelNumRollers);
 
+        // Выпадающий список для выбора количества роликов
         ObservableList<String> optionsForNumRollers = FXCollections.observableArrayList("4", "5", "6");
         _comboBoxNumRollers = new ComboBox<>(optionsForNumRollers);
         _comboBoxNumRollers.setValue("4");
@@ -140,8 +159,9 @@ public class FormArmoredCar extends Application
 
         _hBox.getChildren().add(_comboBoxNumRollers);
     }
-    private void InitButtonCreate()
-    {
+
+    // Инициализация кнопки "Create"
+    private void InitButtonCreate() {
         _buttonCreate = new Button("Create");
         _buttonCreate.setTranslateX(_buttonMargin);
         _root.getChildren().add(_buttonCreate);
@@ -152,7 +172,7 @@ public class FormArmoredCar extends Application
             _armoredCar = new DrawingArmoredCar();
             _armoredCar.Init(rnd.nextInt(200) + 100, rnd.nextInt(1000) + 1000,
                     Color.rgb(rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256)));
-            _armoredCar.SetPosition(rnd.nextInt(90) + 10, rnd.nextInt(90)+10,
+            _armoredCar.SetPosition(rnd.nextInt(90) + 10, rnd.nextInt(90) + 10,
                     (int) _canvas.getWidth(), (int) _canvas.getHeight());
 
             _armoredCar.GetDrawningRollers().SetNumberRollers(Integer.parseInt(_comboBoxNumRollers.getValue()));
@@ -164,12 +184,13 @@ public class FormArmoredCar extends Application
             Draw();
         });
     }
-    private void InitMoveButtons()
-    {
+
+    // Инициализация кнопок управления движением
+    private void InitMoveButtons() {
         Image img;
         ImageView view;
 
-        // Button "Up"
+        // Кнопка "Up"
         _buttonUp = new Button();
 
         img = new Image("arrowUp.png");
@@ -190,7 +211,7 @@ public class FormArmoredCar extends Application
 
         _root.getChildren().add(_buttonUp);
 
-        // Button "Down"
+        // Кнопка "Down"
         _buttonDown = new Button();
 
         img = new Image("arrowDown.png");
@@ -211,7 +232,7 @@ public class FormArmoredCar extends Application
 
         _root.getChildren().add(_buttonDown);
 
-        // Button "Left"
+        // Кнопка "Left"
         _buttonLeft = new Button();
 
         img = new Image("arrowLeft.png");
@@ -232,7 +253,7 @@ public class FormArmoredCar extends Application
 
         _root.getChildren().add(_buttonLeft);
 
-        // Button "Right"
+        // Кнопка "Right"
         _buttonRight = new Button();
 
         img = new Image("arrowRight.png");
@@ -253,8 +274,9 @@ public class FormArmoredCar extends Application
 
         _root.getChildren().add(_buttonRight);
     }
-    private void UpdateGUI()
-    {
+
+    // Обновление расположения элементов интерфейса при изменении размеров окна
+    private void UpdateGUI() {
         double sceneWidth = _scene.getWidth();
         double sceneHeight = _scene.getHeight();
 
@@ -270,7 +292,7 @@ public class FormArmoredCar extends Application
         _buttonUp.setTranslateX(sceneWidth - _buttonMargin - _buttonMoveWidth * 2.0 - _distanceBetweenMoveButtons);
 
         _buttonDown.setTranslateY(sceneHeight - _hBoxHeight - _buttonMoveHeight - _buttonMargin);
-        _buttonDown.setTranslateX(sceneWidth- _buttonMargin - _buttonMoveWidth * 2.0 - _distanceBetweenMoveButtons);
+        _buttonDown.setTranslateX(sceneWidth - _buttonMargin - _buttonMoveWidth * 2.0 - _distanceBetweenMoveButtons);
 
         _buttonLeft.setTranslateY(sceneHeight - _hBoxHeight - _buttonMoveHeight - _buttonMargin);
         _buttonLeft.setTranslateX(sceneWidth - _buttonMargin - _buttonMoveWidth * 3.0 -
@@ -280,26 +302,30 @@ public class FormArmoredCar extends Application
         _buttonRight.setTranslateX(sceneWidth - _buttonMargin - _buttonMoveWidth);
     }
 
-    private void Draw()
-    {
+    // Отрисовка на холсте
+    private void Draw() {
         GraphicsContext gc = _canvas.getGraphicsContext2D();
 
+        // Очистка холста
         gc.clearRect(0.0, 0.0, _canvas.getWidth(), _canvas.getHeight());
+        // Заполнение белым цветом
         gc.setFill(Color.WHITE);
         gc.fillRect(0.0, 0.0, _canvas.getWidth(), _canvas.getHeight());
 
+        // Отрисовка рамки
         gc.setStroke(Color.BLACK);
         gc.setLineWidth(4);
         gc.strokeRect(0.0, 0.0, _canvas.getWidth(), _canvas.getHeight());
 
-        if (_armoredCar != null)
-        {
+        // Отрисовка бронетранспорта, если он создан
+        if (_armoredCar != null) {
             _armoredCar.DrawTransport(gc);
         }
     }
 
-    public static void main(String[] args)
-    {
+    // Метод для запуска приложения
+    public static void main(String[] args) {
         launch();
     }
 }
+
